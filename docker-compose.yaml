@@ -1,0 +1,55 @@
+services:
+  # ========== PostgreSQL Database ==========
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: my_0P_p55w0rd
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
+  # ========== Go Server ==========
+  server:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: go_server
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: my_0P_p55w0rd
+      POSTGRES_DB: postgres
+      INIT_FILE: /config/init.sql
+    volumes:
+      - ./init_scripts:/config/
+    ports:
+      - "8080:8080"
+    command: ["/app/server"]
+
+  # ========== Cron Job (Python Script) ==========
+  cronjob:
+    build:
+      context: ./cron
+      dockerfile: Dockerfile
+    container_name: cron_job
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASS: my_0P_p55w0rd
+      DB_NAME: postgres
+      KEYS_FILE: /cache/api-keys.json
+      QUERY: Cats
+    volumes:
+      - /home/atish/.cache:/cache
+    command: ["sh", "-c", "crond -f -l 0"]
+
+volumes:
+  pgdata:
