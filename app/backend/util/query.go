@@ -13,6 +13,11 @@ type Filter struct {
 	EndDate   time.Time `json:"end"`
 }
 
+type Cursor struct {
+	Id          int       `json:"id"`
+	PublishedAt	time.Time `json:"published_at"`
+}
+
 var LIMIT int = 8
 
 func GetVideoData(sortOrder string, filter Filter, page int) (*sql.Rows, error) {
