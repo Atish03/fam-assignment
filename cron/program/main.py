@@ -28,7 +28,7 @@ def get_videos(api_key, after: str) -> list:
                 title = video["snippet"]["title"]
                 description = video["snippet"]["description"]
                 published_at = video["snippet"]["publishedAt"]
-                thumbnail_url = video["snippet"]["thumbnails"]["default"]["url"]
+                thumbnail_url = video["snippet"]["thumbnails"]["medium"]["url"]
                 return_data.append({
                     "video_id": video_id,
                     "title": title,
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     db = database.Database()
     
     api_key = conf.get_api_key()
-    published_after = db.get_last_video_publish().isoformat("T")
+    published_after = db.get_last_video_publish()
     
     if api_key:
         videos = get_videos(api_key, published_after)

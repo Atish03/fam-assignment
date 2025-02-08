@@ -1,7 +1,7 @@
 import json
 import os
 
-SEARCH_QUERY = os.environ.get("QUERY", "Football")
+SEARCH_QUERY = os.environ.get("QUERY", "Formula 1")
 SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 MAX_RESULTS = 50
 

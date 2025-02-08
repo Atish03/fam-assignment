@@ -1,4 +1,5 @@
 import psycopg2
+import datetime
 
 import conf
 
@@ -37,7 +38,12 @@ class Database:
             """
             
             self.cur.execute(sql)
-            return self.cur.fetchone()[0]
+            last_pub = self.cur.fetchone()[0]
+            
+            if not last_pub:
+                return (datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat("T") + "Z"
+            
+            return last_pub.isoformat("T")
         
         except Exception as e:
             print(f"Cannot query for publish time of latest video: {e}")
