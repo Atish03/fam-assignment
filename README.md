@@ -38,7 +38,7 @@ filters are (all are optional):
 - `end`  : the end date to filter (MM-DD-YYYY) (default is the time of request)
 
 ### Starting the server
-clone the repository, install the cli tool by following installation and add keys. Then run command `docker compose up -d`, the website will be accessible on port `8080`
+clone the repository, install the cli tool by following installation and add keys. Then run command `docker compose up -d`, the website will be accessible on port `80`
 
 ### Techstack
 - `golang`    : for backend and cli
