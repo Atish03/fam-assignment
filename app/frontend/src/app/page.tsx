@@ -92,6 +92,8 @@ export default function Home() {
     var inp = document.getElementById("filter") as HTMLInputElement;
     inp.value = ""
     setInpValue("")
+
+    setCurrentPage(1)
   }
 
   return (
