@@ -1,2 +1,2 @@
-# Run the script every hour
-0 * * * * python /app/main.py >> /var/log/cron.log 2>&1
+*/2 * * * * python /app/main.py
+
