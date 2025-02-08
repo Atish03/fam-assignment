@@ -1,4 +1,6 @@
 # Fam assignment
+click [here](http://34.57.235.77/) to view site
+
 ### Cron
 The cronjob runs the script `main.py` every 3rd minute. The script calls youtube api for 50 videos with `Query` specified in the environment variable, after a publish time (it uses the latest time from db and has a default value of current -1 hour) and inserts them in the database.
 
