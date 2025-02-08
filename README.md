@@ -5,7 +5,7 @@ click [here](http://34.57.235.77/) to view site
 The cronjob runs the script `main.py` every 3rd minute. The script calls youtube api for 50 videos with `Query` specified in the environment variable, after a publish time (it uses the latest time from db and has a default value of current -1 hour) and inserts them in the database.
 
 > [!NOTE]
-> API key is delete if it reaches the maximum limit before the day ends
+> API key is not used if it reaches the maximum quota before the day ends and is reset after 24 hours
 
 ### CLI
 One can manage keys using the CLI tool, use `--help` to know more.
