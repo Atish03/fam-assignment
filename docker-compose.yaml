@@ -8,8 +8,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: my_0P_p55w0rd
       POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
 
   # ========== Go Server ==========
   server:
@@ -28,7 +26,7 @@ services:
     volumes:
       - ./init_scripts:/config/
     ports:
-      - "8080:8080"
+      - "80:8080"
     command: ["/app/server"]
 
   # ========== Cron Job (Python Script) ==========
@@ -48,7 +46,7 @@ services:
       KEYS_FILE: /cache/api-keys.json
       QUERY: Cats
     volumes:
-      - /home/atish/.cache:/cache
+      - ~/.cache:/cache
     command: ["sh", "-c", "crond -f -l 0"]
 
 volumes:
