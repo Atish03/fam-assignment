@@ -88,6 +88,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("cannot get video data")
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
 	}
 
 	defer rows.Close()
@@ -120,5 +121,6 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
 		http.Error(w, "Error encoding response", http.StatusInternalServerError)
 		log.Println("Error encoding response:", err)
+		return
 	}
 }
