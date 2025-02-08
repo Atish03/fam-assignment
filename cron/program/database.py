@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2.extras import execute_values
 import datetime
 
 import conf
@@ -13,20 +14,18 @@ class Database:
         )
         self.cur = self.conn.cursor()
     
-    def insert_video(self, video: dict) -> None:
-        if not video:
+    def insert_videos(self, videos: list) -> None:
+        if len(videos) == 0:
             return
 
         try:
             sql = """
             INSERT INTO videos (video_id, title, description, published_at, thumbnail_url)
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES %s
             ON CONFLICT (video_id) DO NOTHING;
             """
 
-            self.cur.execute(sql, (
-                video["video_id"], video["title"], video["description"], video["published_at"], video["thumbnail_url"]
-            ))
+            execute_values(self.cur, sql, videos)
 
         except Exception as e:
             print(f"Database Error: {e}")

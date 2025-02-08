@@ -29,13 +29,13 @@ def get_videos(api_key, after: str) -> list:
                 description = video["snippet"]["description"]
                 published_at = video["snippet"]["publishedAt"]
                 thumbnail_url = video["snippet"]["thumbnails"]["medium"]["url"]
-                return_data.append({
-                    "video_id": video_id,
-                    "title": title,
-                    "description": description,
-                    "published_at": published_at,
-                    "thumbnail_url": thumbnail_url
-                })
+                return_data.append((
+                    video_id,
+                    title,
+                    description,
+                    published_at,
+                    thumbnail_url
+                ))
     else:
         print(f"API Error: {response.status_code}, {response.text}")
         
@@ -49,8 +49,7 @@ if __name__ == "__main__":
     
     if api_key:
         videos = get_videos(api_key, published_after)
-        for video in videos:
-            db.insert_video(video)
+        db.insert_videos(videos)
         
         print(f"Inserted {len(videos) - 1} videos at {datetime.datetime.now()}")
         

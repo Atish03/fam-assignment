@@ -1,2 +1,2 @@
-*/2 * * * * python /app/main.py
+*/3 * * * * python /app/main.py
 
