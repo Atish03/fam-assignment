@@ -5,6 +5,7 @@ WORKDIR /app
 COPY ./program/* /app/
 
 RUN apk update && apk add --no-cache cron bash
+RUN pip install -r requirements.txt
 
 COPY cronjob /etc/cron.d/cronjob
 
