@@ -6,12 +6,19 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"github.com/spf13/cobra"
+	"time"
+
 	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
 )
 
+type Usage struct {
+	Count int       `json:"count"`
+	StartTime int64 `json:"start_time"`
+}
+
 type KeyData struct {
-	Keys []map[string]int `json:"keys"`
+	Keys []map[string]Usage `json:"keys"`
 }
 
 func readJSON(filename string) (KeyData, error) {
@@ -81,7 +88,10 @@ func addKeys(filename string, newKeys []string) error {
 			continue
 		}
 
-		newMap := map[string]int{newKey: 0}
+		newMap := map[string]Usage{newKey: {
+			Count: 0,
+			StartTime: time.Now().Unix(),
+		}}
 		data.Keys = append(data.Keys, newMap)
 		fmt.Printf("Key '%s' added\n", newKey)
 	}
@@ -105,7 +115,7 @@ func listKeys(filename string) error {
 
 	for _, key := range data.Keys {
 		for keyName, usageCount := range key {
-			table.Append([]string{keyName, fmt.Sprintf("%d", usageCount)})
+			table.Append([]string{keyName, fmt.Sprintf("%d", usageCount.Count)})
 		}
 	}
 
