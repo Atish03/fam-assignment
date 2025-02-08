@@ -2,14 +2,13 @@ FROM python:3.9-alpine
 
 WORKDIR /app
 
-COPY ./program/* /app/
+COPY ./program/* .
+COPY ./requirements.txt .
 
-RUN apk update && apk add --no-cache cron bash
 RUN pip install -r requirements.txt
 
-COPY cronjob /etc/cron.d/cronjob
+COPY cronjob /etc/cron/crontab
 
-RUN chmod 0644 /etc/cron.d/cronjob
-RUN crontab /etc/cron.d/cronjob
+RUN crontab /etc/cron/crontab
 
-CMD cron && tail -f /var/log/cron.log
+CMD ["crond", "-f", "-l", "0"]
