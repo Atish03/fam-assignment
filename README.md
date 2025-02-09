@@ -30,14 +30,41 @@ the endpoint is as follows
 
 `/api/videos?page=${currentPage}&sort=${currSort}&title=${filter.title}&start=${filter.start}&end=${filter.end}`
 
+```curl
+curl "http://34.57.235.77/api/videos?page=1"
+```
+```json
+{
+    "currentPage": 1,
+    "totalPages": 375,
+    "sorted_in": "published_at DESC",
+    "filter": {
+        "title": "",
+        "start": "1970-01-01T00:00:00Z",
+        "end": "2025-02-09T14:42:37.65Z"
+    },
+    "videos": [
+    {
+        "id": "BIMX86gQmhs",
+        "title": "Cats",
+        "description": "Sample description",
+        "published_at": "2025-02-09T14:38:46Z",
+        "thumbnail": "https://i.ytimg.com/vi/BIMX86gQmhs/mqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=BIMX86gQmhs"
+    },
+    ..... +7
+  ]
+}
+```
+
 the available sorts are:
 - `published_at_desc`
 - `title_asc`
 
 filters are (all are optional):
-- `title`: keywords in the title (default is all)
-- `start`: the start date to filter (MM-DD-YYYY) (default is 01-01-1970)
-- `end`  : the end date to filter (MM-DD-YYYY) (default is the time of request)
+- `title`: keywords in the title (string) (default is all)
+- `start`: the start date to filter (unix timestamp) (default is 01-01-1970)
+- `end`  : the end date to filter (unix timestamp) (default is the time of request)
 
 ### Starting the server
 clone the repository, install the cli tool by following installation and add keys. Then run command `docker compose up -d`, the website will be accessible on port `80`
