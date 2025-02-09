@@ -130,7 +130,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 
 	resp.Videos = videos
 	resp.CurrentPage = page
-	resp.SortedIn = sortOrder
+	resp.SortedIn = sortOpt
 	resp.Filter = filter
 
 	// Returning the response
