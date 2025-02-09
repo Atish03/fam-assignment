@@ -28,10 +28,10 @@ The keys are then reset after 24 hours of first use
 ### API
 the endpoint is as follows
 
-`/api/videos?page=${currentPage}&sort=${currSort}&title=${filter.title}&start=${filter.start}&end=${filter.end}`
+`/api/videos?page=${currentPage}&sort=${currSort}&title=${filter.title}&start=${filter.start}&end=${filter.end}&limit=${limit}`
 
 ```curl
-curl "http://34.57.235.77/api/videos?page=1"
+curl "http://34.57.235.77/api/videos?page=1&limit=1"
 ```
 ```json
 {
@@ -52,7 +52,6 @@ curl "http://34.57.235.77/api/videos?page=1"
         "thumbnail": "https://i.ytimg.com/vi/BIMX86gQmhs/mqdefault.jpg",
         "url": "https://www.youtube.com/watch?v=BIMX86gQmhs"
     },
-    ..... +7
   ]
 }
 ```
