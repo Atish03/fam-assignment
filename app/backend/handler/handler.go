@@ -32,25 +32,34 @@ type Resp struct {
 func GetVideos(w http.ResponseWriter, r *http.Request) {
 	resp := Resp{}
 	filter := util.Filter{}
+	var err error
 
+	// Getting all the filters
 	filter.Title = r.URL.Query().Get("title")
 
-	i, err := strconv.ParseInt(r.URL.Query().Get("start"), 10, 64)
-    if err != nil {
-		log.Println("invalid start time:", err)
-        http.Error(w, "not a valid start time", http.StatusBadRequest)
-		return
-    }
-    filter.StartDate = time.UnixMilli(i)
+	startTime := int64(0)
+	if val := r.URL.Query().Get("start"); val != "" {
+		startTime, err = strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			log.Println("invalid start time", err)
+			http.Error(w, "not a valid start time", http.StatusBadRequest)
+			return
+		}
+	}
+    filter.StartDate = time.UnixMilli(int64(startTime))
 
-	i, err = strconv.ParseInt(r.URL.Query().Get("end"), 10, 64)
-    if err != nil {
-		log.Println("invalid end time", err)
-        http.Error(w, "not a valid end time", http.StatusBadRequest)
-		return
-    }
-    filter.EndDate = time.UnixMilli(i)	
+	endTime := time.Now().UnixMilli()
+	if val := r.URL.Query().Get("end"); val != "" {
+		endTime, err = strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			log.Println("invalid end time", err)
+			http.Error(w, "not a valid end time", http.StatusBadRequest)
+			return
+		}
+	}
+    filter.EndDate = time.UnixMilli(endTime)
 
+	// Calculate total pages
 	totalPages, err := util.GetTotalPages(filter)
 	if err != nil {
 		log.Println("Error getting total pages:", err)
@@ -64,6 +73,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 		resp.TotalPages = 1
 	}
 
+	// Getting sort option
 	sortOptions := map[string]string{
 		"published_at_desc": "published_at DESC",
 		"title_asc":         "title ASC",
@@ -74,6 +84,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 		sortOrder = val
 	}
 
+	// Getting page nummber
 	page := 1
 	if pageParam := r.URL.Query().Get("page"); pageParam != "" {
 		var err error
@@ -84,6 +95,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Getting videos data for the sort option and filter for a particular page
 	rows, err := util.GetVideoData(sortOrder, filter, page)
 	if err != nil {
 		log.Println("cannot get video data")
@@ -116,6 +128,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 	resp.SortedIn = sortOrder
 	resp.Filter = filter
 
+	// Returning the response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(resp); err != nil {

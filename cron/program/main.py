@@ -17,6 +17,7 @@ def get_videos(api_key, after: str) -> list:
     
     return_data = []
 
+    # Requesting youtube api for 50 videos matching the parameters
     response = requests.get(conf.SEARCH_URL, params=params)
     if response.status_code == 200:
         data = response.json()

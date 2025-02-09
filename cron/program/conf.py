@@ -29,12 +29,13 @@ def __get_least_used_key(data):
     least_used_key = None
     min_usage = 100
 
+    # Iterating over keys and getting least used one
     for i, key in enumerate(data['keys']):
         for key_name, usage in key.items():
             if usage["count"] < min_usage:
                 min_usage = usage["count"]
                 least_used_key = key_name
-            else:
+            else: # Updating the usage of key after 24 hours
                 time_diff = time.time() - usage["start_time"]
                 if time_diff >= 24 * 60 * 60:
                     data["keys"][i][key_name]["count"] = 0
@@ -55,6 +56,7 @@ def get_api_key():
     for key in data['keys']:
         if least_used_key in key:
             if key[least_used_key]["count"] == 0:
+                # Setting first used time for a key
                 key[least_used_key]["start_time"] = int(time.time())
             key[least_used_key]["count"] += 1
             break
