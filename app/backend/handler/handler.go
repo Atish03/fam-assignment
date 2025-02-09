@@ -79,8 +79,13 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 		"title_asc":         "title ASC",
 	}
 	
+	sortOpt := r.URL.Query().Get("sort")
 	sortOrder := sortOptions["published_at_desc"]
-	if val, ok := sortOptions[r.URL.Query().Get("sort")]; ok {
+	if sortOpt == "" {
+		sortOpt = "published_at_desc"
+	}
+
+	if val, ok := sortOptions[sortOpt]; ok {
 		sortOrder = val
 	}
 

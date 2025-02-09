@@ -37,7 +37,7 @@ curl "http://34.57.235.77/api/videos?page=1"
 {
     "currentPage": 1,
     "totalPages": 375,
-    "sorted_in": "published_at DESC",
+    "sorted_in": "published_at_desc",
     "filter": {
         "title": "",
         "start": "1970-01-01T00:00:00Z",
