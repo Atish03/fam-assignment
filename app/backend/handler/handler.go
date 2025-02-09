@@ -59,8 +59,18 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 	}
     filter.EndDate = time.UnixMilli(endTime)
 
+	limit := 8
+	if val := r.URL.Query().Get("limit"); val != "" {
+		limit, err = strconv.Atoi(val)
+		if err != nil {
+			log.Println("invalid limit", err)
+			http.Error(w, "not a limit", http.StatusBadRequest)
+			return
+		}
+	}
+
 	// Calculate total pages
-	totalPages, err := util.GetTotalPages(filter)
+	totalPages, err := util.GetTotalPages(filter, limit)
 	if err != nil {
 		log.Println("Error getting total pages:", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -101,7 +111,7 @@ func GetVideos(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Getting videos data for the sort option and filter for a particular page
-	rows, err := util.GetVideoData(sortOrder, filter, page)
+	rows, err := util.GetVideoData(sortOrder, filter, page, limit)
 	if err != nil {
 		log.Println("cannot get video data")
 		http.Error(w, "Internal server error", http.StatusInternalServerError)

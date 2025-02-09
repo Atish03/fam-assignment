@@ -18,9 +18,7 @@ type Cursor struct {
 	PublishedAt	time.Time `json:"published_at"`
 }
 
-var LIMIT int = 8
-
-func GetVideoData(sortOrder string, filter Filter, page int) (*sql.Rows, error) {
+func GetVideoData(sortOrder string, filter Filter, page int, limit int) (*sql.Rows, error) {
 	query := fmt.Sprintf(`
 	SELECT video_id, title, description, published_at, thumbnail_url 
 	FROM videos
@@ -30,9 +28,9 @@ func GetVideoData(sortOrder string, filter Filter, page int) (*sql.Rows, error) 
 	ORDER BY %s
 	LIMIT $4 OFFSET $5`, sortOrder)
 
-	offset := (page - 1) * LIMIT
+	offset := (page - 1) * limit
 	
-	rows, err := DB.Query(query, "%" + filter.Title + "%", filter.StartDate, filter.EndDate, LIMIT, offset)
+	rows, err := DB.Query(query, "%" + filter.Title + "%", filter.StartDate, filter.EndDate, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +38,7 @@ func GetVideoData(sortOrder string, filter Filter, page int) (*sql.Rows, error) 
 	return rows, nil
 }
 
-func GetTotalPages(filter Filter) (int, error) {
+func GetTotalPages(filter Filter, limit int) (int, error) {
 	var totalRecords int
 
 	query := fmt.Sprintf(`
@@ -55,6 +53,6 @@ func GetTotalPages(filter Filter) (int, error) {
 		return 0, err
 	}
 
-	totalPages := int(math.Ceil(float64(totalRecords) / float64(LIMIT)))
+	totalPages := int(math.Ceil(float64(totalRecords) / float64(limit)))
 	return totalPages, nil
 }
